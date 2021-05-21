@@ -17,18 +17,21 @@ class Model {
     this.pImage,
     this.pDesc,
     this.pTime,
+    this.pUid
   });
 
   String pTitle;
   String pImage;
   String pDesc;
   String pTime;
+  String pUid;
 
   factory Model.fromJson(Map<String, dynamic> json) => Model(
     pTitle: json["pTitle"],
     pImage: json["pImage"],
     pDesc: json["pDesc"],
     pTime: json["pTime"],
+    pUid: json["pUid"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -36,5 +39,6 @@ class Model {
     "pImage": pImage,
     "pDesc": pDesc,
     "pTime": pTime,
+    "pUid":pUid,
   };
 }

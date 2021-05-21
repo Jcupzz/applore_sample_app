@@ -8,7 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class DatabaseService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
-  CollectionReference Ref = FirebaseFirestore.instance.collection("Products");
 
   String pTitle, pImage, pDesc;
   Future<void> addProductToFb(String pTitle, File pImage, String pDesc) async {
@@ -16,11 +15,16 @@ class DatabaseService {
 
     final User firebaseUser = _auth.currentUser;
 
+
+    CollectionReference Ref = FirebaseFirestore.instance.collection("Products");
+
     downloadURL = await uploadFile(pImage.path);
 
+
+
     if (!(downloadURL == 'Error')) {
-      Model model = new Model(pTitle: pTitle, pDesc: pDesc, pImage: downloadURL, pTime: DateTime.now().toString());
-      Ref.doc(firebaseUser.uid).set(model.toJson()).then((value) {
+      Model model = new Model(pTitle: pTitle, pDesc: pDesc, pImage: downloadURL, pUid: firebaseUser.uid.toString(),pTime: DateTime.now().toString());
+      Ref.add(model.toJson()).then((value) {
         return "Done";
       }).catchError((onError) {
         return "Error";

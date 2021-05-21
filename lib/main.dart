@@ -58,7 +58,7 @@ class AuthenticationWrapper extends StatelessWidget {
 
     }
     else{
-      return CreateProduct();
+      return Home();
     }
 
     
