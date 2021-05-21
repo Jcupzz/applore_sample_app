@@ -30,16 +30,18 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        elevation: 10,
         onPressed: () {
           Navigator.pushNamed(context, '/CreateProduct');
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.add,color: Colors.black,),
       ),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 20,
         centerTitle: true,
-        title: Text("Products",style: TextStyle(color: Colors.black),),
+        title: Text("Products", style: Theme.of(context).textTheme.headline6.copyWith(fontWeight: FontWeight.bold)),
       ),
       body: StreamBuilder<QuerySnapshot>(
           stream: firestore.collection("Products").snapshots(),
@@ -54,7 +56,8 @@ class _HomeState extends State<Home> {
                 child: GridView.builder(
                   scrollDirection: Axis.vertical,
                   padding: EdgeInsets.all(5),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 5,mainAxisSpacing: 5),
+                  gridDelegate:
+                      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 5, mainAxisSpacing: 5),
                   itemBuilder: (BuildContext context, int index) {
                     print(snapshot);
                     return Card(
@@ -66,13 +69,18 @@ class _HomeState extends State<Home> {
                         children: [
                           Expanded(
                             child: CachedNetworkImage(
+                              imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
                               imageUrl: snapshot.data.docs[index]['pImage'],
                               imageBuilder: (context, imageProvider) => Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.height,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.zero,
+                                      bottomRight: Radius.zero,
+                                      topRight: Radius.circular(10),
+                                      topLeft: Radius.circular(10)),
                                   image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                                 ),
                               ),
@@ -83,14 +91,19 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(10,5,10,0),
-                            child: Text(snapshot.data.docs[index]['pTitle'],maxLines: 1,),
+                            padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                            child: Text(
+                              snapshot.data.docs[index]['pTitle'],
+                              maxLines: 1,
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(10,0,10,10),
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                             child: Text(
                               snapshot.data.docs[index]['pDesc'],
                               maxLines: 1,
+                              style: Theme.of(context).textTheme.caption,
                             ),
                           ),
                         ],
