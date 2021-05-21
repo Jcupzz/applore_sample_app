@@ -21,11 +21,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AuthenticationService>(
-            create: (_) => AuthenticationService(FirebaseAuth.instance)),
+        Provider<AuthenticationService>(create: (_) => AuthenticationService(FirebaseAuth.instance)),
         StreamProvider(
-          create: (context) =>
-              context.read<AuthenticationService>().authStateChanges,
+          create: (context) => context.read<AuthenticationService>().authStateChanges,
         )
       ],
       child: MaterialApp(
@@ -33,14 +31,29 @@ class MyApp extends StatelessWidget {
         navigatorObservers: [BotToastNavigatorObserver()],
         title: 'Flutter Demo',
         theme: ThemeData(
+          textTheme: TextTheme(
+            headline1: TextStyle(fontSize: 93, fontWeight: FontWeight.w300, letterSpacing: -1.5),
+            headline2: TextStyle(fontSize: 58, fontWeight: FontWeight.w300, letterSpacing: -0.5),
+            headline3: TextStyle(fontSize: 46, fontWeight: FontWeight.w400),
+            headline4: TextStyle(fontSize: 33, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+            headline5: TextStyle(fontSize: 23, fontWeight: FontWeight.w400),
+            headline6: TextStyle(fontSize: 19, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+            subtitle1: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.15),
+            subtitle2: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: 0.1),
+            bodyText1: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+            bodyText2: TextStyle(fontSize: 13, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+            button: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+            caption: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+            overline: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+          ),
           primarySwatch: Colors.blue,
         ),
         routes: {
-              '/Login': (context) => Login(),
-              '/Register': (context) => Register(),
-              '/Home': (context) => Home(),
-              '/CreateProduct':(context)=>CreateProduct(),
-            },
+          '/Login': (context) => Login(),
+          '/Register': (context) => Register(),
+          '/Home': (context) => Home(),
+          '/CreateProduct': (context) => CreateProduct(),
+        },
         home: AuthenticationWrapper(),
       ),
     );
@@ -50,18 +63,12 @@ class MyApp extends StatelessWidget {
 class AuthenticationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     final firebaseUser = context.watch<User>();
     print(firebaseUser);
     if (firebaseUser == null) {
-    return Register();
-
-    }
-    else{
+      return Register();
+    } else {
       return Home();
     }
-
-    
-
   }
 }

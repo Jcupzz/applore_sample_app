@@ -2,6 +2,7 @@ import 'package:applore_sample_app/Static/Loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,9 +37,9 @@ class _HomeState extends State<Home> {
       ),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
+        elevation: 20,
         centerTitle: true,
-        title: Text("Products"),
+        title: Text("Products",style: TextStyle(color: Colors.black),),
       ),
       body: StreamBuilder<QuerySnapshot>(
           stream: firestore.collection("Products").snapshots(),
@@ -46,61 +47,58 @@ class _HomeState extends State<Home> {
             if (!snapshot.hasData) {
               return Loading();
             } else {
-              return ListView(
-                shrinkWrap: true,
-                children: snapshot.data.docs.map((DocumentSnapshot document) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
-                    child: Container(
-                      color: Colors.blue,
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                        padding: EdgeInsets.all(10),
-                        itemBuilder: (BuildContext context, int index) {
-                          print(document.data());
-                          return Column(
-                            children: [
-                              Expanded(
-                                child: CachedNetworkImage(
-                                  imageUrl: document['pImage'],
-                                  imageBuilder:
-                                      (context, imageProvider) =>
-                                      Container(
-                                        width: MediaQuery.of(context)
-                                            .size
-                                            .width,
-                                        height: MediaQuery.of(context)
-                                            .size
-                                            .height,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          borderRadius:
-                                          BorderRadius.circular(10),
-                                          image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover),
-                                        ),
-                                      ),
-                                  placeholder: ((context, s) =>
-                                      Center(
-                                        child:
-                                        CircularProgressIndicator(),
-                                      )),
-                                  fit: BoxFit.cover,
+              return Container(
+                color: Colors.white,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: GridView.builder(
+                  scrollDirection: Axis.vertical,
+                  padding: EdgeInsets.all(5),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 5,mainAxisSpacing: 5),
+                  itemBuilder: (BuildContext context, int index) {
+                    print(snapshot);
+                    return Card(
+                      elevation: 20,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: CachedNetworkImage(
+                              imageUrl: snapshot.data.docs[index]['pImage'],
+                              imageBuilder: (context, imageProvider) => Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                                 ),
                               ),
-                              Text(document['pTitle']),
-                              Text(document['pDesc'],maxLines: 2,),
-                            ],
-                          );
-                        },
-                        itemCount: snapshot.data.docs.length,
+                              placeholder: ((context, s) => Center(
+                                    child: CircularProgressIndicator(),
+                                  )),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10,5,10,0),
+                            child: Text(snapshot.data.docs[index]['pTitle'],maxLines: 1,),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10,0,10,10),
+                            child: Text(
+                              snapshot.data.docs[index]['pDesc'],
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  );
-                }).toList(),
+                    );
+                  },
+                  itemCount: snapshot.data.docs.length,
+                ),
               );
             }
           }),
