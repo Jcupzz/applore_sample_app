@@ -1,9 +1,11 @@
+import 'package:applore_sample_app/DatabaseService/DatabaseService.dart';
 import 'package:applore_sample_app/Pages/DisplayProduct.dart';
 import 'package:applore_sample_app/Static/Loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +18,7 @@ class _HomeState extends State<Home> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   DocumentSnapshot documentSnapshot;
   bool isLandScape = false;
+  String docID;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +66,12 @@ class _HomeState extends State<Home> {
                   itemBuilder: (BuildContext context, int index) {
                     print(snapshot);
                     return GestureDetector(
+                      onLongPress: () {
+                        DatabaseService databaseService = new DatabaseService();
+                        docID = snapshot.data.docs[index].id;
+                        print("DARA"+docID.toString());
+                        databaseService.deleteProductFromFb(snapshot, index,context,docID);
+                      },
                       onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (_)=>DisplayProduct(snapshot, index)));
                         },
@@ -75,6 +84,8 @@ class _HomeState extends State<Home> {
                           children: [
                             Expanded(
                               child:
+                                  kIsWeb?
+                                      Image.network(snapshot.data.docs[index]['pImage'],):
                               CachedNetworkImage(
                                 imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
                                 imageUrl: snapshot.data.docs[index]['pImage'],
