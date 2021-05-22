@@ -1,5 +1,6 @@
 import 'package:applore_sample_app/AuthenticationService.dart';
 import 'package:applore_sample_app/Pages/CreateProduct.dart';
+import 'package:applore_sample_app/Pages/DisplayProduct.dart';
 import 'package:applore_sample_app/Pages/Login.dart';
 import 'package:applore_sample_app/Pages/Register.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
           '/Register': (context) => Register(),
           '/Home': (context) => Home(),
           '/CreateProduct': (context) => CreateProduct(),
+
         },
         home: AuthenticationWrapper(),
       ),

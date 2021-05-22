@@ -1,3 +1,4 @@
+import 'package:applore_sample_app/Pages/DisplayProduct.dart';
 import 'package:applore_sample_app/Static/Loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,7 +44,8 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         title: Text("Products", style: Theme.of(context).textTheme.headline6.copyWith(fontWeight: FontWeight.bold)),
       ),
-      body: StreamBuilder<QuerySnapshot>(
+      body:
+      StreamBuilder<QuerySnapshot>(
           stream: firestore.collection("Products").snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {
@@ -60,53 +62,59 @@ class _HomeState extends State<Home> {
                       SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 5, mainAxisSpacing: 5),
                   itemBuilder: (BuildContext context, int index) {
                     print(snapshot);
-                    return Card(
-                      elevation: 20,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: CachedNetworkImage(
-                              imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
-                              imageUrl: snapshot.data.docs[index]['pImage'],
-                              imageBuilder: (context, imageProvider) => Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.zero,
-                                      bottomRight: Radius.zero,
-                                      topRight: Radius.circular(10),
-                                      topLeft: Radius.circular(10)),
-                                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                    return GestureDetector(
+                      onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (_)=>DisplayProduct(snapshot, index)));
+                        },
+                      child: Card(
+                        elevation: 20,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        color: Colors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child:
+                              CachedNetworkImage(
+                                imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
+                                imageUrl: snapshot.data.docs[index]['pImage'],
+                                imageBuilder: (context, imageProvider) => Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.zero,
+                                        bottomRight: Radius.zero,
+                                        topRight: Radius.circular(10),
+                                        topLeft: Radius.circular(10)),
+                                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                  ),
                                 ),
+                                placeholder: ((context, s) => Center(
+                                      child: CircularProgressIndicator(),
+                                    )),
+                                fit: BoxFit.cover,
                               ),
-                              placeholder: ((context, s) => Center(
-                                    child: CircularProgressIndicator(),
-                                  )),
-                              fit: BoxFit.cover,
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-                            child: Text(
-                              snapshot.data.docs[index]['pTitle'],
-                              maxLines: 1,
-                              style: Theme.of(context).textTheme.bodyText1,
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                              child: Text(
+                                snapshot.data.docs[index]['pTitle'],
+                                maxLines: 1,
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                            child: Text(
-                              snapshot.data.docs[index]['pDesc'],
-                              maxLines: 1,
-                              style: Theme.of(context).textTheme.caption,
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                              child: Text(
+                                snapshot.data.docs[index]['pDesc'],
+                                maxLines: 1,
+                                style: Theme.of(context).textTheme.caption,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },
