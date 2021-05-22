@@ -27,7 +27,7 @@ class DatabaseService {
 
     if (!(downloadURL == 'Error')) {
       Model model = new Model(pTitle: pTitle, pDesc: pDesc, pImage: downloadURL, pUid: firebaseUser.uid.toString(),pTime: DateTime.now().toString());
-      Ref.add(model.toJson()).then((value) {
+      await Ref.add(model.toJson()).then((value) {
 
         return "Done";
       }).catchError((onError) {
@@ -36,8 +36,30 @@ class DatabaseService {
     }
   }
 
-  Future<void> deleteProductFromFb(AsyncSnapshot snapshot,int index,BuildContext context,String docID){
+  Future<void> updateProductFromFb(AsyncSnapshot<QuerySnapshot> snapshot,int index,String pTitle, File pImage, String pDesc)async{
 
+    String downloadURL;
+
+    final User firebaseUser = _auth.currentUser;
+
+    downloadURL = await uploadFile(pImage.path);
+    String docID = snapshot.data.docs[index].id;
+
+
+    if (!(downloadURL == 'Error')) {
+      Model model = new Model(pTitle: pTitle, pDesc: pDesc, pImage: downloadURL, pUid: firebaseUser.uid.toString(),pTime: DateTime.now().toString());
+      await Ref.doc(docID).update(model.toJson()).then((value) {
+
+        return "Done";
+      }).catchError((onError) {
+        return "Error";
+      });
+    }
+
+  }
+
+  Future<void> deleteProductFromFb(AsyncSnapshot<QuerySnapshot> snapshot,int index,BuildContext context){
+    String docID = snapshot.data.docs[index].id;
     showDialog(context: context, builder: (context){
       return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -48,22 +70,20 @@ class DatabaseService {
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0,0,0,10),
-            child: ElevatedButton(onPressed: ()async{
-
+            child: TextButton(onPressed: ()async{
+              Navigator.pop(context);
               await Ref.doc(docID).delete().then((value) {
                 BotToast.showText(text: "Deleted ${snapshot.data.docs[index]['pTitle']}");
-                Navigator.pop(context);
               });
 
-            }, child: Text("Yes"),style: ElevatedButton.styleFrom(elevation:0,primary: Colors.red),),
+            }, child: Text("Yes",style: TextStyle(color: Colors.red))),
           ),
 
           Padding(
             padding: const EdgeInsets.fromLTRB(10,0,10,10),
-            child: ElevatedButton(onPressed: (){
+            child: TextButton(onPressed: (){
                 Navigator.pop(context);
-            }, child: Text("No"),
-            style: ElevatedButton.styleFrom(elevation:0,primary: Colors.green),
+            }, child: Text("No",style: TextStyle(color: Colors.greenAccent),),
             ),
           )
 

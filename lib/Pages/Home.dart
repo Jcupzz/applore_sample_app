@@ -1,6 +1,7 @@
 import 'package:applore_sample_app/AuthenticationService.dart';
 import 'package:applore_sample_app/DatabaseService/DatabaseService.dart';
 import 'package:applore_sample_app/Pages/DisplayProduct.dart';
+import 'package:applore_sample_app/Pages/UpdateProduct.dart';
 import 'package:applore_sample_app/Static/Loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,7 +42,10 @@ class _HomeState extends State<Home> {
         onPressed: () {
           Navigator.pushNamed(context, '/CreateProduct');
         },
-        child: Icon(Icons.add,color: Colors.black,),
+        child: Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
       ),
       appBar: AppBar(
         actions: [
@@ -66,7 +70,7 @@ class _HomeState extends State<Home> {
                     value: 0,
                     child: Text(
                       "SignOut",
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontFamily: 'Poppins'),
+                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: 'Poppins'),
                     )),
               ];
             },
@@ -77,8 +81,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         title: Text("Products", style: Theme.of(context).textTheme.headline6.copyWith(fontWeight: FontWeight.bold)),
       ),
-      body:
-      SafeArea(
+      body: SafeArea(
         child: WillPopScope(
           onWillPop: () async {
             SystemNavigator.pop();
@@ -97,20 +100,33 @@ class _HomeState extends State<Home> {
                     child: GridView.builder(
                       scrollDirection: Axis.vertical,
                       padding: EdgeInsets.all(5),
-                      gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 5, mainAxisSpacing: 5,),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5,
+                      ),
                       itemBuilder: (BuildContext context, int index) {
                         print(snapshot);
                         return GestureDetector(
-                          onLongPress: () {
-                            DatabaseService databaseService = new DatabaseService();
-                            docID = snapshot.data.docs[index].id;
-                            print("DARA"+docID.toString());
-                            databaseService.deleteProductFromFb(snapshot, index,context,docID);
+                          onLongPressStart: (LongPressStartDetails longPressEndDetails) {
+                            // docID = snapshot.data.docs[index].id;
+                            // print("DOCUMENT ID: " + docID.toString());
+
+
+
+                            _showPopupMenu(longPressEndDetails.globalPosition,snapshot,index,context);
+
+
+
+
+
+
+
+
                           },
-                          onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (_)=>DisplayProduct(snapshot, index)));
-                            },
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => DisplayProduct(snapshot, index)));
+                          },
                           child: Card(
                             elevation: 20,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -119,30 +135,31 @@ class _HomeState extends State<Home> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
-                                  child:
-                                      kIsWeb?
-                                          Image.network(snapshot.data.docs[index]['pImage'],):
-                                  CachedNetworkImage(
-                                    imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
-                                    imageUrl: snapshot.data.docs[index]['pImage'],
-                                    imageBuilder: (context, imageProvider) => Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: MediaQuery.of(context).size.height,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.zero,
-                                            bottomRight: Radius.zero,
-                                            topRight: Radius.circular(10),
-                                            topLeft: Radius.circular(10)),
-                                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                                      ),
-                                    ),
-                                    placeholder: ((context, s) => Center(
-                                          child: CircularProgressIndicator(),
-                                        )),
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: kIsWeb
+                                      ? Image.network(
+                                          snapshot.data.docs[index]['pImage'],
+                                        )
+                                      : CachedNetworkImage(
+                                          imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
+                                          imageUrl: snapshot.data.docs[index]['pImage'],
+                                          imageBuilder: (context, imageProvider) => Container(
+                                            width: MediaQuery.of(context).size.width,
+                                            height: MediaQuery.of(context).size.height,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.rectangle,
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft: Radius.zero,
+                                                  bottomRight: Radius.zero,
+                                                  topRight: Radius.circular(10),
+                                                  topLeft: Radius.circular(10)),
+                                              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                            ),
+                                          ),
+                                          placeholder: ((context, s) => Center(
+                                                child: CircularProgressIndicator(),
+                                              )),
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
@@ -216,5 +233,44 @@ class _HomeState extends State<Home> {
             ],
           );
         });
+  }
+
+  void _showPopupMenu(Offset offset,AsyncSnapshot<QuerySnapshot> snapshot,int index,BuildContext context) async {
+    double left = offset.dx;
+    double top = offset.dy;
+    final screenSize = MediaQuery.of(context).size;
+    await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(left, top,screenSize.width - left,
+        screenSize.height - top),
+      items: [
+        PopupMenuItem(
+          value: 1,
+          child: Text("Update"),
+        ),
+        PopupMenuItem(
+          value: 2,
+          child: Text("Delete"),
+        ),
+      ],
+      elevation: 20.0,
+    ).then((value) {
+      if (value != null) {
+        print(value);
+        switch(value){
+          case 1:
+
+            Navigator.push(context, MaterialPageRoute(builder: (_)=>UpdateProduct(snapshot, index)));
+
+            break;
+          case 2:
+
+            DatabaseService databaseService = new DatabaseService();
+            databaseService.deleteProductFromFb(snapshot, index,context);
+
+            break;
+        }
+      }
+    });
   }
 }
