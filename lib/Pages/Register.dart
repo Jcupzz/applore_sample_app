@@ -39,7 +39,7 @@ class _RegisterState extends State<Register> {
     return loading
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.purple[900],
+            backgroundColor: Colors.white,
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
@@ -55,8 +55,8 @@ class _RegisterState extends State<Register> {
                               child: Text(
                                 "Welcome to",
                                 style: TextStyle(
-                                    color: Colors.deepOrange[200],
-                                    fontSize: 45,
+                                    color: Colors.black,
+                                    fontSize: 30,
                                     fontStyle: FontStyle.normal,
                                     fontFamily: 'LobsterTwo',
                                     fontWeight: FontWeight.bold),
@@ -67,15 +67,15 @@ class _RegisterState extends State<Register> {
                               child: Text(
                                 "Shoppy.",
                                 style: TextStyle(
-                                    color: Colors.deepOrange[300],
-                                    fontSize: 70,
+                                    color: Colors.black,
+                                    fontSize: 60,
                                     fontStyle: FontStyle.normal,
                                     fontFamily: 'LobsterTwo',
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
                             SizedBox(
-                              height: 50,
+                              height: 10,
                             ),
 
                             //Email Field
@@ -88,23 +88,23 @@ class _RegisterState extends State<Register> {
                               onChanged: (value) {
                                 setState(() => email = value);
                               },
-                              style: TextStyle(color: Colors.purple[200]),
-                              cursorColor: Colors.deepOrange,
+                              style: Theme.of(context).textTheme.caption.copyWith(color: Colors.black),
+                              cursorColor: Colors.blue,
                               decoration: InputDecoration(
                                 labelStyle: TextStyle(
-                                  color: Colors.deepOrange[200],
+                                  color: Colors.grey,
                                 ),
                                 labelText: "Email",
                                 fillColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide: BorderSide(
-                                      width: 1, color: Colors.purple[200]),
+                                      width: 1, color: Colors.blue),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide: BorderSide(
-                                      width: 1, color: Colors.deepOrange[200]),
+                                      width: 1, color: Colors.black),
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -114,7 +114,7 @@ class _RegisterState extends State<Register> {
                             ),
 
                             SizedBox(
-                              height: 25,
+                              height: 15,
                             ),
 
                             //Password Field
@@ -127,22 +127,22 @@ class _RegisterState extends State<Register> {
                                 setState(() => password = value);
                               },
                               obscureText: true,
-                              style: TextStyle(color: Colors.purple[200]),
-                              cursorColor: Colors.deepOrange,
+                              style: Theme.of(context).textTheme.caption.copyWith(color: Colors.black),
+                              cursorColor: Colors.blue,
                               decoration: InputDecoration(
                                 labelStyle: TextStyle(
-                                  color: Colors.deepOrange[200],
+                                  color: Colors.grey,
                                 ),
                                 labelText: "Password",
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide: BorderSide(
-                                      width: 1, color: Colors.purple[200]),
+                                      width: 1, color: Colors.blue),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide: BorderSide(
-                                      width: 1, color: Colors.deepOrange[200]),
+                                      width: 1, color: Colors.black),
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -151,19 +151,23 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                             SizedBox(
-                              height: 30,
+                              height: 10,
                             ),
                             Container(
-                              width: double.infinity,
+                              width: MediaQuery.of(context).size.width,
                               child: PhysicalModel(
                                 color: Colors.transparent,
-                                shadowColor: Colors.deepPurple[900],
+                                shadowColor: Colors.black,
                                 elevation: 10,
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.circular(20),
-                                child: FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20)),
+                                    primary: Colors.black,
+                                    onPrimary: Colors.blue,
+                                  ),
                                   onPressed: () async {
                                     if (_formkey.currentState.validate()) {
                                       setState(() {
@@ -178,7 +182,7 @@ class _RegisterState extends State<Register> {
                                             context, '/Home');
                                         BotToast.showSimpleNotification(
                                           title: " Welcome! ",
-                                          backgroundColor: Colors.orangeAccent,
+                                          backgroundColor: Colors.black,
                                         );
                                       } else {
                                         Navigator.pushReplacementNamed(
@@ -209,29 +213,21 @@ class _RegisterState extends State<Register> {
                                     //  }
                                     // }
                                   },
-                                  color: Colors.deepOrange[400],
                                   child: Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                                    child: Text("Sign up"),
+                                    child: Text("Sign up",style: Theme.of(context).textTheme.caption.copyWith(fontWeight: FontWeight.bold,color: Colors.white),),
                                   ),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            FlatButton(
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            TextButton(
                                 onPressed: () {
                                   Navigator.pushNamed(context, '/Login');
                                 },
                                 child: Text(
                                   "Already registered ? Login Here",
-                                  style: TextStyle(
-                                      color: Colors.deepOrange[400],
-                                      fontFamily: 'Sans',
-                                      fontWeight: FontWeight.w900),
+                                  style: Theme.of(context).textTheme.caption
                                 )),
                             Row(
                               children: [
@@ -239,43 +235,55 @@ class _RegisterState extends State<Register> {
                                     child: Divider(
                                   thickness: 1,
                                   height: 20,
-                                  color: Colors.deepOrange,
+                                  color: Colors.black,
                                 )),
                                 Text(
-                                  "OR",
-                                  style: TextStyle(color: Colors.deepOrange),
+                                  " OR ",
+                                  style: TextStyle(color: Colors.black),
                                 ),
                                 Expanded(
                                     child: Divider(
                                   thickness: 1,
                                   height: 20,
-                                  color: Colors.deepOrange,
+                                  color: Colors.black,
                                 )),
                               ],
                             ),
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 60,
-                              child: ElevatedButton(
-                                onPressed: ()async{
-                                  dynamic isSuccess = await context
-                                          .read<AuthenticationService>().signInWithGoogle();
-                                  print(isSuccess);
-                                  
-                                  final firebaseUser = context.watch<User>();
-                                  print("FIREBASE UID: "+firebaseUser.uid);
+                            SizedBox(height: 10,),
+                            PhysicalModel(
+                              color: Colors.transparent,
+                              shadowColor: Colors.black,
+                              elevation: 10,
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(20),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 60,
+                                child: ElevatedButton(
 
-                                  
-                                },
-                                child: Row(
-                                children: [
+                                  style: ElevatedButton.styleFrom(primary: Colors.black,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                                  onPressed: ()async{
+                                    dynamic isSuccess = await context
+                                            .read<AuthenticationService>().signInWithGoogle();
+                                    print(isSuccess);
 
-                                  SvgPicture.asset("assets/google_logo.svg",fit: BoxFit.cover,width: 24,height: 24,),
-                                  SizedBox(width: 20,),
-                                  Text("Sign in with Google"),
-                                ],
-                              
-                              ),)
+                                    final firebaseUser = context.watch<User>();
+                                    print("FIREBASE UID: "+firebaseUser.uid);
+
+                                  },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+
+                                    SvgPicture.asset("assets/google_logo.svg",fit: BoxFit.cover,width: 24,height: 24,),
+                                    SizedBox(width: 10,),
+                                    Text("Sign in with Google"),
+
+                                  ],
+
+                                ),)
+                              ),
                             )
                           ],
                         ),

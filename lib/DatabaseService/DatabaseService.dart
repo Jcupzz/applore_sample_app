@@ -28,6 +28,7 @@ class DatabaseService {
     if (!(downloadURL == 'Error')) {
       Model model = new Model(pTitle: pTitle, pDesc: pDesc, pImage: downloadURL, pUid: firebaseUser.uid.toString(),pTime: DateTime.now().toString());
       Ref.add(model.toJson()).then((value) {
+
         return "Done";
       }).catchError((onError) {
         return "Error";

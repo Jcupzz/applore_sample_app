@@ -62,7 +62,7 @@ class _HomeState extends State<Home> {
                   scrollDirection: Axis.vertical,
                   padding: EdgeInsets.all(5),
                   gridDelegate:
-                      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 5, mainAxisSpacing: 5),
+                      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 5, mainAxisSpacing: 5,),
                   itemBuilder: (BuildContext context, int index) {
                     print(snapshot);
                     return GestureDetector(
