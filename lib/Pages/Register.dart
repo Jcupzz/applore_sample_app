@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:provider/provider.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -62,16 +63,23 @@ class _RegisterState extends State<Register> {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Shoppy.",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 60,
-                                    fontStyle: FontStyle.normal,
-                                    fontFamily: 'LobsterTwo',
-                                    fontWeight: FontWeight.bold),
+                            Shimmer.fromColors(
+                              baseColor: Colors.black,
+                              enabled: true,
+                              loop: 4,
+                              period: Duration(milliseconds: 1000),
+                              highlightColor: Colors.white,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Shoppy.",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 60,
+                                      fontStyle: FontStyle.normal,
+                                      fontFamily: 'LobsterTwo',
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -89,7 +97,7 @@ class _RegisterState extends State<Register> {
                                 setState(() => email = value);
                               },
                               style: Theme.of(context).textTheme.caption.copyWith(color: Colors.black),
-                              cursorColor: Colors.blue,
+                              cursorColor: Colors.black,
                               decoration: InputDecoration(
                                 labelStyle: TextStyle(
                                   color: Colors.grey,
@@ -99,7 +107,7 @@ class _RegisterState extends State<Register> {
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide: BorderSide(
-                                      width: 1, color: Colors.blue),
+                                      width: 1, color: Colors.grey),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -128,7 +136,7 @@ class _RegisterState extends State<Register> {
                               },
                               obscureText: true,
                               style: Theme.of(context).textTheme.caption.copyWith(color: Colors.black),
-                              cursorColor: Colors.blue,
+                              cursorColor: Colors.black,
                               decoration: InputDecoration(
                                 labelStyle: TextStyle(
                                   color: Colors.grey,
@@ -137,7 +145,7 @@ class _RegisterState extends State<Register> {
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide: BorderSide(
-                                      width: 1, color: Colors.blue),
+                                      width: 1, color: Colors.grey),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -166,7 +174,7 @@ class _RegisterState extends State<Register> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(20)),
                                     primary: Colors.black,
-                                    onPrimary: Colors.blue,
+                                    onPrimary: Colors.white,
                                   ),
                                   onPressed: () async {
                                     if (_formkey.currentState.validate()) {
@@ -181,6 +189,10 @@ class _RegisterState extends State<Register> {
                                         Navigator.pushReplacementNamed(
                                             context, '/Home');
                                         BotToast.showSimpleNotification(
+                                          titleStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                                           title: " Welcome! ",
                                           backgroundColor: Colors.black,
                                         );

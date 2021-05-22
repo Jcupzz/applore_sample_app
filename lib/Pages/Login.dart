@@ -4,6 +4,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -14,7 +15,6 @@ class _LoginState extends State<Login> {
   double minSize = 400;
   bool isLandScape = false;
 
-
   final _formkey = GlobalKey<FormState>();
   String email = '';
   String password = '';
@@ -24,9 +24,9 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    if(MediaQuery.of(context).orientation == Orientation.landscape){
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
       isLandScape = true;
-    }else{
+    } else {
       isLandScape = false;
     }
     double maxSize = MediaQuery.of(context).size.width;
@@ -34,7 +34,7 @@ class _LoginState extends State<Login> {
     return loading
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.purple[900],
+            backgroundColor: Colors.white,
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
@@ -42,31 +42,45 @@ class _LoginState extends State<Login> {
                     key: _formkey,
                     child: SingleChildScrollView(
                       child: Container(
-                        width: isLandScape? minSize : maxSize,
+                        width: isLandScape ? minSize : maxSize,
                         child: Column(
                           children: <Widget>[
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Hi there",
-                                style: TextStyle(
-                                    color: Colors.deepOrange[200],
-                                    fontSize: 70,
-                                    fontStyle: FontStyle.normal,
-                                    fontFamily: 'LobsterTwo',
-                                    fontWeight: FontWeight.bold),
+                            Shimmer.fromColors(
+                              highlightColor: Colors.white,
+                              baseColor: Colors.black,
+                              enabled: true,
+                              loop: 1,
+                              period: Duration(milliseconds: 1000),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Hi there",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 70,
+                                      fontStyle: FontStyle.normal,
+                                      fontFamily: 'LobsterTwo',
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Welcome back",
-                                style: TextStyle(
-                                    color: Colors.deepOrange[300],
-                                    fontSize: 45,
-                                    fontFamily: 'LobsterTwo',
-                                    fontStyle: FontStyle.normal,
-                                    fontWeight: FontWeight.bold),
+                            Shimmer.fromColors(
+                              baseColor: Colors.black,
+                              enabled: true,
+                              loop: 1,
+                              period: Duration(milliseconds: 1000),
+                              highlightColor: Colors.white,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Welcome back",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 45,
+                                      fontFamily: 'LobsterTwo',
+                                      fontStyle: FontStyle.normal,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -76,30 +90,25 @@ class _LoginState extends State<Login> {
                             //Email Field
 
                             TextFormField(
-                              validator: (val) =>
-                                  val.isEmpty || !(val.contains('@'))
-                                      ? 'Enter a valid email address'
-                                      : null,
+                              validator: (val) => val.isEmpty || !(val.contains('@')) ? 'Enter a valid email address' : null,
                               onChanged: (value) {
                                 setState(() => email = value);
                               },
-                              style: TextStyle(color: Colors.purple[200]),
-                              cursorColor: Colors.deepOrange,
+                              style: Theme.of(context).textTheme.caption.copyWith(color: Colors.black),
+                              cursorColor: Colors.blue,
                               decoration: InputDecoration(
                                 labelStyle: TextStyle(
-                                  color: Colors.deepOrange[200],
+                                  color: Colors.grey,
                                 ),
                                 labelText: "Email",
                                 fillColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(
-                                      width: 1, color: Colors.purple[200]),
+                                  borderSide: BorderSide(width: 1, color: Colors.grey),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(
-                                      width: 1, color: Colors.deepOrange[200]),
+                                  borderSide: BorderSide(width: 1, color: Colors.black),
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -115,29 +124,26 @@ class _LoginState extends State<Login> {
                             //Password Field
 
                             TextFormField(
-                              validator: (val) => val.isEmpty || val.length < 6
-                                  ? 'Enter a password greater than 6 characters'
-                                  : null,
+                              validator: (val) =>
+                                  val.isEmpty || val.length < 6 ? 'Enter a password greater than 6 characters' : null,
                               onChanged: (value) {
                                 setState(() => password = value);
                               },
                               obscureText: true,
-                              style: TextStyle(color: Colors.purple[200]),
-                              cursorColor: Colors.deepOrange,
+                              style: Theme.of(context).textTheme.caption.copyWith(color: Colors.black),
+                              cursorColor: Colors.blue,
                               decoration: InputDecoration(
                                 labelStyle: TextStyle(
-                                  color: Colors.deepOrange[200],
+                                  color: Colors.grey,
                                 ),
                                 labelText: "Password",
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(
-                                      width: 1, color: Colors.purple[200]),
+                                  borderSide: BorderSide(width: 1, color: Colors.grey),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(
-                                      width: 1, color: Colors.deepOrange[200]),
+                                  borderSide: BorderSide(width: 1, color: Colors.black),
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -149,43 +155,43 @@ class _LoginState extends State<Login> {
                               height: 30,
                             ),
                             Container(
-                              width: double.infinity,
+                              width: MediaQuery.of(context).size.width,
                               child: PhysicalModel(
                                 color: Colors.transparent,
-                                shadowColor: Colors.deepPurple[900],
+                                shadowColor: Colors.black,
                                 elevation: 10,
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.circular(20),
-                                child: FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                      onPrimary: Colors.white,
+                                      primary: Colors.black),
                                   onPressed: () async {
                                     print("Button presed");
                                     //
                                     if (_formkey.currentState.validate()) {
-                                       setState(() {
-                                         loading = true;
-                                       });
-                                      isSuccess = await context
-                                          .read<AuthenticationService>()
-                                          .signIn(email: email, password: password);
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      isSuccess =
+                                          await context.read<AuthenticationService>().signIn(email: email, password: password);
                                       print(isSuccess);
                                       if (isSuccess.toString() == "Signed in") {
-                                        Navigator.pushReplacementNamed(
-                                            context, '/Home');
+                                        Navigator.pushReplacementNamed(context, '/Home');
                                         BotToast.showSimpleNotification(
-                                          title:
-                                          "Welcome back!",
-                                          backgroundColor: Colors.orangeAccent,
+                                          titleStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                                          title: "Welcome back!",
+                                          backgroundColor: Colors.black,
                                         );
                                       } else {
-                                        Navigator.pushReplacementNamed(
-                                            context, '/Register');
+                                        Navigator.pushReplacementNamed(context, '/Register');
                                         BotToast.showSimpleNotification(
-                                          title:
-                                          "Failed to sign in. Please check internet connection and try again!",
+                                          title: "Failed to sign in. Please check internet connection and try again!",
                                           backgroundColor: Colors.red,
-
                                         );
                                       }
                                     }
@@ -206,7 +212,6 @@ class _LoginState extends State<Login> {
                                     //   }
                                     // }
                                   },
-                                  color: Colors.deepOrange[400],
                                   child: Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                                     child: Text("Sign in"),
@@ -223,8 +228,7 @@ class _LoginState extends State<Login> {
                               child: Text(
                                 error,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.deepOrange[200], fontSize: 18),
+                                style: TextStyle(color: Colors.red, fontSize: 18),
                               ),
                             )
                           ],
